@@ -1,5 +1,4 @@
 'use client';
-
 import { useAuth } from '../../hooks/useAuth';
 import { useTheme } from '../../context/ThemeContext';
 import ThemeToggle from '../shared/ThemeToggle';
@@ -66,7 +65,6 @@ export default function Header() {
         <div className="px-3 sm:px-4 md:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between">
           {/* Left section */}
           <div className="flex items-center gap-2 sm:gap-4">
-            {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-1.5 sm:p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all touch-manipulation"
@@ -75,7 +73,6 @@ export default function Header() {
               <FiMenu className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700 dark:text-gray-300" />
             </button>
 
-            {/* Logo - Always visible */}
             <Link 
               href="/dashboard" 
               className="flex items-center gap-2 group"
@@ -89,7 +86,6 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Center - Search (Desktop) */}
           <div className="hidden md:flex flex-1 max-w-md mx-4">
             <div className="relative w-full">
               <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -104,9 +100,7 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Right section */}
           <div className="flex items-center gap-1.5 sm:gap-3">
-            {/* Mobile Search Toggle */}
             <button
               onClick={() => setShowSearch(!showSearch)}
               className="md:hidden p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all touch-manipulation"
@@ -115,11 +109,8 @@ export default function Header() {
               <FiSearch className="w-5 h-5 text-gray-700 dark:text-gray-300" />
             </button>
 
-            {/* Theme Toggle */}
             <ThemeToggle />
 
-          
-            {/* User Dropdown */}
             <div className="relative dropdown-container" ref={dropdownRef}>
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
@@ -226,7 +217,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Search Bar */}
         <AnimatePresence>
           {showSearch && (
             <motion.div
@@ -255,7 +245,6 @@ export default function Header() {
         </AnimatePresence>
       </header>
 
-      {/* Mobile Sidebar */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <>

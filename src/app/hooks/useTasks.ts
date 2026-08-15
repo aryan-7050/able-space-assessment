@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from 'react';
 import toast from 'react-hot-toast';
-
 export interface Task {
   _id?: string;
   title: string;

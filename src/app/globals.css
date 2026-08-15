@@ -21,8 +21,6 @@
     color: #f9fafb;
   }
 }
-
-/* ========== Glass Effects ========== */
 .glass {
   background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
@@ -46,8 +44,6 @@
   background: rgba(15, 23, 42, 0.8);
   border-color: rgba(55, 65, 81, 0.5);
 }
-
-/* ========== Gradients ========== */
 .gradient-text {
   background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
   -webkit-background-clip: text;

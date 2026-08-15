@@ -5,7 +5,6 @@ interface CardProps {
   className?: string;
   hover?: boolean;
 }
-
 export default function Card({ children, className = '', hover = false }: CardProps) {
   return (
     <div

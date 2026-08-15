@@ -1,5 +1,4 @@
 'use client';
-
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
@@ -61,8 +60,6 @@ export default function Sidebar() {
   return (
     <aside className="fixed left-0 top-14 sm:top-16 h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] w-16 hover:w-64 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-r border-gray-200/50 dark:border-gray-700/50 hidden md:block overflow-y-auto z-30 transition-all duration-300 ease-in-out group/sidebar overflow-x-hidden">
     
-
-      {/* Navigation */}
       <nav className="px-2 py-2 space-y-1">
         {navItems.map((item, index) => {
           const Icon = item.icon;
@@ -92,7 +89,6 @@ export default function Sidebar() {
                   <Icon className="w-5 h-5" />
                 </div>
                 
-                {/* Label - Hidden when collapsed */}
                 <div className="flex-1 min-w-0 overflow-hidden">
                   <span className={`font-medium text-sm whitespace-nowrap ${
                     isActive ? 'text-blue-600 dark:text-blue-400' : ''
@@ -106,7 +102,6 @@ export default function Sidebar() {
                   </p>
                 </div>
 
-                {/* Tooltip for collapsed state */}
                 <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 group-hover/sidebar:hidden whitespace-nowrap z-50">
                   {item.label}
                 </div>
@@ -123,7 +118,6 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Quick Stats - Only visible when expanded */}
       <div className="mx-3 p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/10 dark:to-purple-900/10 rounded-xl border border-gray-200/50 dark:border-gray-700/50 opacity-0 group-hover/sidebar:opacity-100 transition-all duration-300">
         <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Quick Stats</p>
         <div className="space-y-1.5">
@@ -141,8 +135,6 @@ export default function Sidebar() {
           })}
         </div>
       </div>
-
-      {/* Upgrade Card - Only visible when expanded */}
       <div className="mx-3 mt-3 p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl text-white opacity-0 group-hover/sidebar:opacity-100 transition-all duration-300">
         <div className="flex items-center gap-2">
           <FiZap className="w-4 h-4" />
@@ -154,7 +146,6 @@ export default function Sidebar() {
         </button>
       </div>
 
-      {/* Footer - Only visible when expanded */}
       <div className="p-3 mt-2 border-t border-gray-200/50 dark:border-gray-700/50 opacity-0 group-hover/sidebar:opacity-100 transition-all duration-300">
         <p className="text-[10px] text-gray-400 dark:text-gray-500 text-center">
           © 2026 TaskFlow Inc.

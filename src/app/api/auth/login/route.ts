@@ -15,10 +15,8 @@ export async function POST(request: NextRequest) {
     
     const body = await request.json();
     
-    // Validate input
     const validatedData = loginSchema.parse(body);
     
-    // Find user with password field
     const user = await User.findOne({ email: validatedData.email }).select('+password');
     
     if (!user) {
@@ -28,7 +26,6 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Check password
     const isPasswordValid = await user.comparePassword(validatedData.password);
     
     if (!isPasswordValid) {
@@ -37,8 +34,7 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-    
-    // Generate JWT with proper secret
+
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
       console.error('JWT_SECRET not set in environment variables');
@@ -57,8 +53,6 @@ export async function POST(request: NextRequest) {
       jwtSecret,
       { expiresIn: '7d' }
     );
-    
-    // Create response with user data
     const response = NextResponse.json({
       success: true,
       data: {
@@ -68,8 +62,7 @@ export async function POST(request: NextRequest) {
         role: user.role,
       },
     });
-    
-    // Set cookie
+
     response.cookies.set('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -88,7 +81,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    
     return NextResponse.json(
       { success: false, error: error.message || 'Login failed' },
       { status: 500 }

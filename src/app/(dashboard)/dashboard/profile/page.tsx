@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 import { useRouter } from 'next/navigation';
@@ -114,13 +113,11 @@ export default function ProfilePage() {
               <p className="text-sm text-gray-500 dark:text-gray-400">Manage your personal info</p>
             </div>
 
-            {/* Profile Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-700/50 overflow-hidden"
             >
-              {/* Avatar Section */}
               <div className="p-6 text-center border-b border-gray-200/50 dark:border-gray-700/50">
                 <div className="relative inline-block">
                   <div className="w-24 h-24 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-3xl mx-auto">
@@ -136,8 +133,6 @@ export default function ProfilePage() {
                 <p className="text-sm text-gray-500 dark:text-gray-400">{profile.bio}</p>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{profile.joinDate}</p>
               </div>
-
-              {/* Info Section */}
               <div className="p-4 space-y-3">
                 {/* Name */}
                 <div>
@@ -153,8 +148,6 @@ export default function ProfilePage() {
                     <p className="text-sm font-medium text-gray-900 dark:text-white">{profile.name}</p>
                   )}
                 </div>
-
-                {/* Email */}
                 <div>
                   <label className="text-xs font-medium text-gray-500 dark:text-gray-400">Email</label>
                   {isEditing ? (
@@ -168,8 +161,6 @@ export default function ProfilePage() {
                     <p className="text-sm font-medium text-gray-900 dark:text-white">{profile.email}</p>
                   )}
                 </div>
-
-                {/* Location */}
                 <div>
                   <label className="text-xs font-medium text-gray-500 dark:text-gray-400">Location</label>
                   {isEditing ? (
@@ -187,7 +178,6 @@ export default function ProfilePage() {
                   )}
                 </div>
 
-                {/* Bio */}
                 <div>
                   <label className="text-xs font-medium text-gray-500 dark:text-gray-400">Bio</label>
                   {isEditing ? (
@@ -202,8 +192,6 @@ export default function ProfilePage() {
                   )}
                 </div>
               </div>
-
-              {/* Stats Section */}
               <div className="p-4 border-t border-gray-200/50 dark:border-gray-700/50">
                 <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
                   Task Stats
@@ -227,8 +215,6 @@ export default function ProfilePage() {
                   </div>
                 </div>
               </div>
-
-              {/* Actions */}
               <div className="p-4 border-t border-gray-200/50 dark:border-gray-700/50 flex flex-col gap-2">
                 {isEditing ? (
                   <div className="flex gap-2">

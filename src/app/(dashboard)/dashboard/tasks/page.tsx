@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 import { useTasks, Task, TaskFormData } from '../../../hooks/useTasks';
@@ -72,7 +71,6 @@ export default function TasksPage() {
       resetForm();
       setShowForm(false);
     } catch (error) {
-      // Error handled in hook
     }
   };
 
@@ -218,9 +216,6 @@ export default function TasksPage() {
   );
 }
 
-// ============== Sub-Components ==============
-
-// Task Card Component
 function TaskCard({ task, onEdit, onDelete, onStatusChange }: any) {
   const statusStyles = {
     completed: 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300',
@@ -299,7 +294,6 @@ function TaskCard({ task, onEdit, onDelete, onStatusChange }: any) {
   );
 }
 
-// Task Form Modal Component
 function TaskFormModal({ editingTask, formData, setFormData, onSubmit, onCancel }: any) {
   return (
     <motion.div
@@ -423,7 +417,6 @@ function TaskFormModal({ editingTask, formData, setFormData, onSubmit, onCancel 
   );
 }
 
-// Empty State Component
 function EmptyState({ searchTerm, onCreateTask }: any) {
   return (
     <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-200/50 dark:border-gray-700/50">

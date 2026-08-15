@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 import { useRouter } from 'next/navigation';
@@ -46,7 +45,6 @@ export default function SettingsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
   
-  // Profile State
   const [profileData, setProfileData] = useState({
     name: '',
     email: '',
@@ -55,7 +53,6 @@ export default function SettingsPage() {
     website: '',
   });
   
-  // Password State
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -65,7 +62,6 @@ export default function SettingsPage() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Notification State
   const [notifications, setNotifications] = useState({
     emailNotifications: true,
     pushNotifications: true,
@@ -74,7 +70,6 @@ export default function SettingsPage() {
     marketingEmails: false,
   });
 
-  // Appearance State
   const [appearance, setAppearance] = useState({
     theme: theme || 'light',
     fontSize: 'medium',
@@ -82,7 +77,6 @@ export default function SettingsPage() {
     animations: true,
   });
 
-  // Privacy State
   const [privacy, setPrivacy] = useState({
     profileVisibility: 'public',
     showEmail: false,
@@ -159,7 +153,6 @@ export default function SettingsPage() {
   const handleAppearanceUpdate = async () => {
     setIsSaving(true);
     try {
-      // Update theme
       if (appearance.theme !== theme) {
         toggleTheme();
       }
@@ -222,7 +215,6 @@ export default function SettingsPage() {
         <Sidebar />
         <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 ml-0 md:ml-56 lg:ml-64 mt-14 sm:mt-16">
           <div className="max-w-5xl mx-auto">
-            {/* Header */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -236,7 +228,6 @@ export default function SettingsPage() {
               </p>
             </motion.div>
 
-            {/* Tabs - Mobile Scrollable */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -264,7 +255,6 @@ export default function SettingsPage() {
               </div>
             </motion.div>
 
-            {/* Content */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
@@ -331,7 +321,6 @@ export default function SettingsPage() {
   );
 }
 
-// ============== Profile Settings Component ==============
 
 function ProfileSettings({ profileData, setProfileData, handleProfileUpdate, isSaving }: any) {
   return (
@@ -433,7 +422,6 @@ function ProfileSettings({ profileData, setProfileData, handleProfileUpdate, isS
   );
 }
 
-// ============== Security Settings Component ==============
 
 function SecuritySettings({
   passwordData,
@@ -450,7 +438,6 @@ function SecuritySettings({
 }: any) {
   return (
     <div className="space-y-6">
-      {/* Change Password */}
       <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-4 sm:p-6">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-xl">
@@ -551,7 +538,6 @@ function SecuritySettings({
         </form>
       </div>
 
-      {/* Delete Account */}
       <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-red-200/50 dark:border-red-800/30 p-4 sm:p-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-xl">
@@ -577,7 +563,6 @@ function SecuritySettings({
   );
 }
 
-// ============== Notification Settings Component ==============
 
 function NotificationSettings({ notifications, setNotifications, handleNotificationUpdate, isSaving }: any) {
   const notificationOptions = [
@@ -648,7 +633,6 @@ function NotificationSettings({ notifications, setNotifications, handleNotificat
   );
 }
 
-// ============== Appearance Settings Component ==============
 
 function AppearanceSettings({ appearance, setAppearance, handleAppearanceUpdate, isSaving, theme, toggleTheme }: any) {
   const fontSizes = [
@@ -676,7 +660,6 @@ function AppearanceSettings({ appearance, setAppearance, handleAppearanceUpdate,
       </div>
 
       <div className="space-y-6">
-        {/* Theme Selection */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Theme</label>
           <div className="grid grid-cols-3 gap-3">
@@ -706,7 +689,6 @@ function AppearanceSettings({ appearance, setAppearance, handleAppearanceUpdate,
           </div>
         </div>
 
-        {/* Font Size */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Font Size</label>
           <div className="flex gap-2">
@@ -726,7 +708,6 @@ function AppearanceSettings({ appearance, setAppearance, handleAppearanceUpdate,
           </div>
         </div>
 
-        {/* Toggle Options */}
         <div className="space-y-3">
           <div className="flex items-center justify-between p-4 bg-gray-50/50 dark:bg-gray-700/30 rounded-xl border border-gray-200/50 dark:border-gray-700/50">
             <div>
@@ -780,7 +761,6 @@ function AppearanceSettings({ appearance, setAppearance, handleAppearanceUpdate,
   );
 }
 
-// ============== Privacy Settings Component ==============
 
 function PrivacySettings({ privacy, setPrivacy, handlePrivacyUpdate, isSaving }: any) {
   const visibilityOptions = [
@@ -802,7 +782,6 @@ function PrivacySettings({ privacy, setPrivacy, handlePrivacyUpdate, isSaving }:
       </div>
 
       <div className="space-y-6">
-        {/* Profile Visibility */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Profile Visibility</label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -827,7 +806,6 @@ function PrivacySettings({ privacy, setPrivacy, handlePrivacyUpdate, isSaving }:
           </div>
         </div>
 
-        {/* Toggle Options */}
         <div className="space-y-3">
           <div className="flex items-center justify-between p-4 bg-gray-50/50 dark:bg-gray-700/30 rounded-xl border border-gray-200/50 dark:border-gray-700/50">
             <div>

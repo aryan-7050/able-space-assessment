@@ -3,7 +3,6 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-
 export interface User {
   id: string;
   name: string;

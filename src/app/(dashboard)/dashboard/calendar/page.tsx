@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 import { useTasks } from '../../../hooks/useTasks';
@@ -137,7 +136,6 @@ export default function CalendarPage() {
         <Sidebar />
         <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 ml-0 md:ml-56 lg:ml-64 mt-14 sm:mt-16">
           <div className="max-w-7xl mx-auto">
-            {/* Header Section */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -185,7 +183,6 @@ export default function CalendarPage() {
               </div>
             </motion.div>
 
-            {/* Stats Cards */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -226,7 +223,6 @@ export default function CalendarPage() {
               />
             </motion.div>
 
-            {/* Calendar */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -252,7 +248,6 @@ export default function CalendarPage() {
                 </button>
               </div>
 
-              {/* Day Names */}
               <div className="grid grid-cols-7 gap-1 p-2 sm:p-3">
                 {dayNames.map((day) => (
                   <div key={day} className="text-center text-xs sm:text-sm font-semibold text-gray-500 dark:text-gray-400 py-2">
@@ -260,8 +255,6 @@ export default function CalendarPage() {
                   </div>
                 ))}
               </div>
-
-              {/* Calendar Grid */}
               <div className="grid grid-cols-7 gap-1 p-2 sm:p-3">
                 {days.map((day, index) => {
                   const dayTasks = day ? getTasksForDate(day) : [];
@@ -473,7 +466,6 @@ export default function CalendarPage() {
   );
 }
 
-// ============== Enhanced Stat Card Component ==============
 
 function StatCard({ icon, value, label, bgColor, borderColor, gradient }: any) {
   return (

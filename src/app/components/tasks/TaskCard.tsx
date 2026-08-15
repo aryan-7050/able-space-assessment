@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { FiEdit2, FiTrash2, FiClock, FiFlag } from 'react-icons/fi';
 import { format } from 'date-fns';
 import Badge from '../ui/Badge';
-
 interface TaskCardProps {
   task: Task;
   onUpdate: (id: string, data: Partial<Task>) => void;

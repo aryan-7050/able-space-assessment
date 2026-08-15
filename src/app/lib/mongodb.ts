@@ -1,12 +1,9 @@
 import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI as string;
-
 if (!MONGODB_URI) {
   throw new Error('Please define MONGODB_URI environment variable');
 }
-
-// Use global variable to cache connection
 let cached = (global as any).mongoose;
 
 if (!cached) {
@@ -15,7 +12,7 @@ if (!cached) {
 
 async function dbConnect() {
   if (cached.conn) {
-    console.log('✅ Using cached database connection');
+    console.log(' Using cached database connection');
     return cached.conn;
   }
 
@@ -28,12 +25,12 @@ async function dbConnect() {
       family: 4,
     };
 
-    console.log('🔄 Connecting to MongoDB...');
+    console.log(' Connecting to MongoDB...');
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      console.log('✅ MongoDB connected successfully');
+      console.log(' MongoDB connected successfully');
       return mongoose;
     }).catch((error) => {
-      console.error('❌ MongoDB connection error:', error);
+      console.error(' MongoDB connection error:', error);
       throw error;
     });
   }
@@ -44,7 +41,6 @@ async function dbConnect() {
     cached.promise = null;
     throw e;
   }
-
   return cached.conn;
 }
 

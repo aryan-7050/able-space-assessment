@@ -7,7 +7,6 @@ import { FiCheckCircle, FiClock, FiAlertCircle, FiTrendingUp } from 'react-icons
 interface TaskStatsProps {
   tasks: Task[];
 }
-
 export default function TaskStats({ tasks }: TaskStatsProps) {
   const total = tasks.length;
   const completed = tasks.filter(t => t.status === 'completed').length;

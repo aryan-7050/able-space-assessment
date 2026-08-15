@@ -14,11 +14,8 @@ export async function POST(request: NextRequest) {
     await dbConnect();
     
     const body = await request.json();
-    
-    // Validate input
     const validatedData = registerSchema.parse(body);
-    
-    // Check if user exists
+   
     const existingUser = await User.findOne({ email: validatedData.email });
     if (existingUser) {
       return NextResponse.json(
@@ -27,14 +24,12 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Create user
     const user = await User.create({
       name: validatedData.name,
       email: validatedData.email,
       password: validatedData.password,
     });
     
-    // Return user without password
     const userResponse = {
       id: user._id,
       name: user.name,

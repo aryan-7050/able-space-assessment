@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useTasks, Task, TaskFormData } from '../../hooks/useTasks';
@@ -70,7 +69,6 @@ export default function DashboardPage() {
       resetForm();
       setShowForm(false);
     } catch (error) {
-      // Error is already handled in the hook
     }
   };
 
@@ -100,7 +98,6 @@ export default function DashboardPage() {
     completionRate: tasks.length > 0 ? Math.round((tasks.filter(t => t.status === 'completed').length / tasks.length) * 100) : 0,
   };
 
-  // Get time-based greeting
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return 'Good Morning';
@@ -108,7 +105,6 @@ export default function DashboardPage() {
     return 'Good Evening';
   };
 
-  // Get emoji based on time
   const getEmoji = () => {
     const hour = new Date().getHours();
     if (hour < 12) return '';
@@ -136,7 +132,6 @@ export default function DashboardPage() {
         <Sidebar />
         <main className="flex-1 p-4 sm:p-6 lg:p-8 ml-0 md:ml-16 transition-all duration-300 mt-14 sm:mt-16">
           <div className="max-w-6xl mx-auto">
-            {/* Welcome Section */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -163,8 +158,6 @@ export default function DashboardPage() {
                 </button>
               </div>
             </motion.div>
-
-            {/* Stats Grid */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -205,7 +198,6 @@ export default function DashboardPage() {
               />
             </motion.div>
 
-            {/* Completion Rate */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -234,7 +226,6 @@ export default function DashboardPage() {
               </div>
             </motion.div>
 
-            {/* Task List - Compact */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -273,7 +264,6 @@ export default function DashboardPage() {
         </main>
       </div>
 
-      {/* Task Form Modal */}
       {showForm && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <motion.div
@@ -369,8 +359,6 @@ export default function DashboardPage() {
   );
 }
 
-// ============== Stat Card Component ==============
-
 function StatCard({ title, value, icon: Icon, color, change, changeType }: any) {
   const colors = {
     indigo: 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400',
@@ -407,8 +395,6 @@ function StatCard({ title, value, icon: Icon, color, change, changeType }: any) 
     </motion.div>
   );
 }
-
-// ============== Task Card Component ==============
 
 function TaskCard({ task, onEdit, onDelete, onStatusChange }: any) {
   const statusStyles = {

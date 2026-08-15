@@ -9,15 +9,12 @@ export async function GET(request: NextRequest) {
     if (!token) {
       return NextResponse.json({ success: false, error: 'Not authenticated' }, { status: 401 });
     }
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret') as { userId: string };
     await dbConnect();
     const user = await User.findById(decoded.userId).select('-password');
-    
     if (!user) {
       return NextResponse.json({ success: false, error: 'User not found' }, { status: 404 });
     }
-
     return NextResponse.json({
       success: true,
       data: { id: user._id, name: user.name, email: user.email, role: user.role },

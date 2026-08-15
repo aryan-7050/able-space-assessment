@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 import { useRouter } from 'next/navigation';
@@ -190,7 +189,6 @@ export default function HelpPage() {
         <Sidebar />
         <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 ml-0 md:ml-16 mt-14 sm:mt-16 transition-all duration-300">
           <div className="max-w-5xl mx-auto">
-            {/* Header */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -209,7 +207,6 @@ export default function HelpPage() {
               </p>
             </motion.div>
 
-            {/* Search Bar */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -236,7 +233,6 @@ export default function HelpPage() {
               </div>
             </motion.div>
 
-            {/* Quick Guides */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -276,8 +272,6 @@ export default function HelpPage() {
                 })}
               </div>
             </motion.div>
-
-            {/* Categories */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -406,14 +400,12 @@ export default function HelpPage() {
               </div>
             </motion.div>
 
-            {/* Contact Support & Feedback */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
               className="mt-4 sm:mt-6 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4"
             >
-              {/* Contact Support */}
               <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-3 sm:p-6">
                 <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
                   <div className="p-1.5 sm:p-2 bg-green-100 dark:bg-green-900/30 rounded-xl">
@@ -498,7 +490,6 @@ export default function HelpPage() {
               </div>
             </motion.div>
 
-            {/* Community Stats */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -523,7 +514,6 @@ export default function HelpPage() {
               </div>
             </motion.div>
 
-            {/* Footer Note */}
             <div className="mt-4 sm:mt-6 text-center text-[10px] sm:text-xs text-gray-400 dark:text-gray-500">
               <p>Can't find what you're looking for? <a href="mailto:support@taskflow.com" className="text-indigo-600 dark:text-indigo-400 hover:underline">Contact support</a></p>
             </div>
