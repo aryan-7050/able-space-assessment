@@ -2,7 +2,7 @@
 
 A modern, full-stack task management application built with Next.js, MongoDB, and Tailwind CSS. Streamline your workflow with intuitive task tracking, calendar views, and real-time notifications.
 
-## 📋 Table of Contents
+##  Table of Contents
 
 - [Overview](#overview)
 - [Key Features](#key-features)
@@ -22,13 +22,13 @@ A modern, full-stack task management application built with Next.js, MongoDB, an
 
 ---
 
-## 🚀 Overview
+##  Overview
 
 TaskFlow is a comprehensive task management platform designed to help individuals and teams organize, track, and complete tasks efficiently. With features like task creation, status tracking, calendar views, and real-time notifications, TaskFlow provides a seamless productivity experience across all devices.
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
 ### User Features
 - **User Authentication**: Secure JWT-based authentication with bcrypt password hashing
@@ -51,7 +51,7 @@ TaskFlow is a comprehensive task management platform designed to help individual
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 | Technology | Version | Purpose |
@@ -76,7 +76,7 @@ TaskFlow is a comprehensive task management platform designed to help individual
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Node.js 18+
