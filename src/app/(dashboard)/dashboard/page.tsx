@@ -4,10 +4,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useTasks, Task, TaskFormData } from '../../hooks/useTasks';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
-  FiPlus, FiSearch, FiCheckCircle, FiClock, FiAlertCircle,
-  FiTrendingUp, FiEdit2, FiTrash2, FiCalendar, FiFlag, FiX, FiSave
+  FiPlus, FiCheckCircle, FiClock, FiAlertCircle,
+  FiTrendingUp, FiEdit2, FiTrash2, FiCalendar, FiFlag, FiArrowUp, FiArrowDown
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import Header from '../../components/layout/Header';
@@ -19,8 +19,6 @@ export default function DashboardPage() {
   const { tasks, loading, createTask, updateTask, deleteTask, fetchTasks } = useTasks();
   
   const [showForm, setShowForm] = useState(false);
-  const [filter, setFilter] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [formData, setFormData] = useState<TaskFormData>({
     title: '',
@@ -94,13 +92,6 @@ export default function DashboardPage() {
     }
   };
 
-  const filteredTasks = tasks.filter(task => {
-    const matchesFilter = filter === 'all' || task.status === filter;
-    const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          task.description.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesFilter && matchesSearch;
-  });
-
   const stats = {
     total: tasks.length,
     completed: tasks.filter(t => t.status === 'completed').length,
@@ -109,12 +100,28 @@ export default function DashboardPage() {
     completionRate: tasks.length > 0 ? Math.round((tasks.filter(t => t.status === 'completed').length / tasks.length) * 100) : 0,
   };
 
+  // Get time-based greeting
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good Morning';
+    if (hour < 17) return 'Good Afternoon';
+    return 'Good Evening';
+  };
+
+  // Get emoji based on time
+  const getEmoji = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return '';
+    if (hour < 17) return '';
+    return '';
+  };
+
   if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="text-center px-4">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading your dashboard...</p>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400 font-medium">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -127,21 +134,21 @@ export default function DashboardPage() {
       <Header />
       <div className="flex">
         <Sidebar />
-        <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 ml-0 md:ml-56 lg:ml-64 mt-14 sm:mt-16">
-          <div className="max-w-7xl mx-auto">
-            {/* Welcome Header */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 ml-0 md:ml-16 transition-all duration-300 mt-14 sm:mt-16">
+          <div className="max-w-6xl mx-auto">
+            {/* Welcome Section */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 text-white mb-4 sm:mb-6 md:mb-8"
+              className="mb-6"
             >
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
-                <div className="w-full sm:w-auto">
-                  <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">
-                    Welcome back, {user?.name?.split(' ')[0] || 'User'}! 👋
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+                    {getGreeting()}, {user?.name?.split(' ')[0] || 'User'}! {getEmoji()}
                   </h1>
-                  <p className="mt-1 opacity-90 text-xs sm:text-sm md:text-base">
-                    You have {stats.pending} pending tasks. Let's get things done!
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    You have <span className="font-semibold text-indigo-600 dark:text-indigo-400">{stats.pending}</span> pending tasks. Let's get things done!
                   </p>
                 </div>
                 <button
@@ -149,44 +156,52 @@ export default function DashboardPage() {
                     resetForm();
                     setShowForm(true);
                   }}
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-white text-gray-900 rounded-lg hover:shadow-lg transition-all transform hover:scale-105 font-medium text-sm sm:text-base"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl hover:shadow-lg hover:shadow-indigo-500/25 transition-all transform hover:scale-105 font-medium text-sm"
                 >
-                  <FiPlus className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <FiPlus className="w-4 h-4" />
                   <span>New Task</span>
                 </button>
               </div>
             </motion.div>
 
-            {/* Stats Cards */}
+            {/* Stats Grid */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6"
+              className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6"
             >
-              <StatCard 
-                icon={<FiTrendingUp className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-blue-600 dark:text-blue-400" />}
+              <StatCard
+                title="Total Tasks"
                 value={stats.total}
-                label="Total"
-                bgColor="bg-blue-100 dark:bg-blue-900/50"
+                icon={FiTrendingUp}
+                color="indigo"
+                change="+12%"
+                changeType="up"
               />
-              <StatCard 
-                icon={<FiCheckCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-green-600 dark:text-green-400" />}
+              <StatCard
+                title="Completed"
                 value={stats.completed}
-                label="Completed"
-                bgColor="bg-green-100 dark:bg-green-900/50"
+                icon={FiCheckCircle}
+                color="green"
+                change="+8%"
+                changeType="up"
               />
-              <StatCard 
-                icon={<FiClock className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-yellow-600 dark:text-yellow-400" />}
+              <StatCard
+                title="In Progress"
                 value={stats.inProgress}
-                label="In Progress"
-                bgColor="bg-yellow-100 dark:bg-yellow-900/50"
+                icon={FiClock}
+                color="yellow"
+                change="-2%"
+                changeType="down"
               />
-              <StatCard 
-                icon={<FiAlertCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-red-600 dark:text-red-400" />}
+              <StatCard
+                title="Pending"
                 value={stats.pending}
-                label="Pending"
-                bgColor="bg-red-100 dark:bg-red-900/50"
+                icon={FiAlertCircle}
+                color="red"
+                change="+5%"
+                changeType="up"
               />
             </motion.div>
 
@@ -195,97 +210,54 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-4 sm:p-6 text-white mb-4 sm:mb-6"
+              className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200/50 dark:border-gray-700/50 p-6 mb-6"
             >
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
-                <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto">
-                  <div>
-                    <div className="text-xs sm:text-sm opacity-90">Completion Rate</div>
-                    <div className="text-2xl sm:text-3xl font-bold">{stats.completionRate}%</div>
-                  </div>
-                  <div className="flex-1 sm:w-64 h-2 sm:h-3 bg-white/20 rounded-full overflow-hidden">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Completion Rate</h3>
+                  <p className="text-3xl font-bold text-gray-900 dark:text-white mt-1">{stats.completionRate}%</p>
+                </div>
+                <div className="flex-1 w-full sm:max-w-md">
+                  <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${stats.completionRate}%` }}
                       transition={{ duration: 1, ease: "easeOut" }}
-                      className="h-full bg-white rounded-full"
+                      className="h-full bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full"
                     />
                   </div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 text-center sm:text-left">
+                    {stats.completed} of {stats.total} tasks completed
+                  </p>
                 </div>
-                <div className="text-xs sm:text-sm opacity-90">
-                  {stats.completed} of {stats.total} tasks done
-                </div>
+                <span className="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">This month</span>
               </div>
             </motion.div>
 
-            {/* Filters and Search */}
+            {/* Task List - Compact */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6"
             >
-              <div className="flex-1 relative">
-                <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search tasks..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              
-              <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                {['all', 'pending', 'in-progress', 'completed'].map((status) => (
+              {tasks.length === 0 ? (
+                <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                  <div className="text-6xl mb-4">📋</div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No tasks yet</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Create your first task to get started!</p>
                   <button
-                    key={status}
-                    onClick={() => setFilter(status)}
-                    className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg whitespace-nowrap transition-colors text-xs sm:text-sm ${
-                      filter === status
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-                    }`}
+                    onClick={() => {
+                      resetForm();
+                      setShowForm(true);
+                    }}
+                    className="mt-4 px-6 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl hover:shadow-lg hover:shadow-indigo-500/25 transition-all transform hover:scale-105 text-sm font-medium"
                   >
-                    {status === 'all' ? 'All' : status.charAt(0).toUpperCase() + status.slice(1)}
+                    Create Task
                   </button>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Task Form Modal */}
-            <AnimatePresence>
-              {showForm && (
-                <TaskFormModal
-                  editingTask={editingTask}
-                  formData={formData}
-                  setFormData={setFormData}
-                  onSubmit={handleSubmit}
-                  onCancel={() => {
-                    setShowForm(false);
-                    resetForm();
-                  }}
-                />
-              )}
-            </AnimatePresence>
-
-            {/* Task List */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              {filteredTasks.length === 0 ? (
-                <EmptyState 
-                  searchTerm={searchTerm}
-                  onCreateTask={() => {
-                    resetForm();
-                    setShowForm(true);
-                  }}
-                />
+                </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-                  {filteredTasks.map((task) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                  {tasks.slice(0, 6).map((task) => (
                     <TaskCard
                       key={task._id}
                       task={task}
@@ -300,106 +272,218 @@ export default function DashboardPage() {
           </div>
         </main>
       </div>
+
+      {/* Task Form Modal */}
+      {showForm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto"
+          >
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+              {editingTask ? 'Edit Task' : 'Create New Task'}
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  className="w-full px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  placeholder="Enter task title"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description *</label>
+                <textarea
+                  required
+                  rows={3}
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  className="w-full px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+                  placeholder="Enter task description"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+                  <select
+                    value={formData.status}
+                    onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                    className="w-full px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
+                  <select
+                    value={formData.priority}
+                    onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
+                    className="w-full px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Due Date</label>
+                <input
+                  type="date"
+                  value={formData.dueDate}
+                  onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+                  className="w-full px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl hover:shadow-lg hover:shadow-indigo-500/25 transition-all transform hover:scale-105 font-medium text-sm"
+                >
+                  {editingTask ? 'Update Task' : 'Create Task'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowForm(false);
+                    resetForm();
+                  }}
+                  className="px-4 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm font-medium"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
 
-// ============== Sub-Components ==============
+// ============== Stat Card Component ==============
 
-// Stat Card Component
-function StatCard({ icon, value, label, bgColor }: any) {
-  return (
-    <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 md:p-6 rounded-xl shadow-sm border border-gray-200/50 dark:border-gray-700/50 hover:shadow-md transition-all">
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{value}</div>
-          <div className="text-[10px] sm:text-xs md:text-sm text-gray-600 dark:text-gray-400">{label}</div>
-        </div>
-        <div className={`p-2 sm:p-3 ${bgColor} rounded-lg`}>
-          {icon}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Task Card Component
-function TaskCard({ task, onEdit, onDelete, onStatusChange }: any) {
-  const statusStyles = {
-    completed: 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300',
-    'in-progress': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300',
-    pending: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-  };
-
-  const priorityStyles = {
-    high: 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300',
-    medium: 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300',
-    low: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-  };
-
-  const statusLabels = {
-    'pending': 'Pending',
-    'in-progress': 'In Progress',
-    'completed': 'Completed'
+function StatCard({ title, value, icon: Icon, color, change, changeType }: any) {
+  const colors = {
+    indigo: 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400',
+    green: 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400',
+    yellow: 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400',
+    red: 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400',
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
+      whileHover={{ y: -4, scale: 1.02 }}
+      className="stat-card bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-4 sm:p-6 transition-all"
+    >
+      <div className="flex items-start justify-between">
+        <div>
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{title}</p>
+          <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mt-1">{value}</p>
+        </div>
+        <div className={`p-2 sm:p-3 rounded-xl ${colors[color]}`}>
+          <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+        </div>
+      </div>
+      <div className="flex items-center gap-1 mt-3">
+        {changeType === 'up' ? (
+          <FiArrowUp className="w-3 h-3 text-green-500" />
+        ) : (
+          <FiArrowDown className="w-3 h-3 text-red-500" />
+        )}
+        <span className={`text-xs font-medium ${changeType === 'up' ? 'text-green-500' : 'text-red-500'}`}>
+          {change}
+        </span>
+        <span className="text-xs text-gray-400 dark:text-gray-500">from last month</span>
+      </div>
+    </motion.div>
+  );
+}
+
+// ============== Task Card Component ==============
+
+function TaskCard({ task, onEdit, onDelete, onStatusChange }: any) {
+  const statusStyles = {
+    completed: 'status-badge completed',
+    'in-progress': 'status-badge in-progress',
+    pending: 'status-badge pending',
+  };
+
+  const priorityStyles = {
+    high: 'priority-badge high',
+    medium: 'priority-badge medium',
+    low: 'priority-badge low',
+  };
+
+  const priorityClass = {
+    high: 'priority-high',
+    medium: 'priority-medium',
+    low: 'priority-low',
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{ y: -4 }}
-      className="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 p-4 sm:p-5 md:p-6 border border-gray-200/50 dark:border-gray-700/50"
+      className={`task-card ${priorityClass[task.priority]} bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-4 sm:p-5 transition-all`}
     >
-      <div className="flex justify-between items-start mb-2 sm:mb-3">
-        <h3 className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white line-clamp-2 flex-1">
+      <div className="flex justify-between items-start mb-3">
+        <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-2 flex-1 text-sm">
           {task.title}
         </h3>
-        <div className="flex gap-1 sm:gap-2 ml-2 flex-shrink-0">
+        <div className="flex gap-1 ml-2 flex-shrink-0">
           <button
             onClick={() => onEdit(task)}
-            className="p-1.5 sm:p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-            title="Edit task"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
           >
-            <FiEdit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500 dark:text-gray-400" />
+            <FiEdit2 className="w-3.5 h-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
           </button>
           <button
             onClick={() => onDelete(task._id)}
-            className="p-1.5 sm:p-1 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
-            title="Delete task"
+            className="p-1.5 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
           >
-            <FiTrash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-500" />
+            <FiTrash2 className="w-3.5 h-3.5 text-gray-400 hover:text-red-500" />
           </button>
         </div>
       </div>
 
-      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 line-clamp-3">
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
         {task.description}
       </p>
 
-      <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
-        <span className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium ${statusStyles[task.status as keyof typeof statusStyles]}`}>
-          {statusLabels[task.status as keyof typeof statusLabels]}
+      <div className="flex flex-wrap gap-1.5 mb-4">
+        <span className={statusStyles[task.status]}>
+          {task.status === 'in-progress' ? 'In Progress' : task.status.charAt(0).toUpperCase() + task.status.slice(1)}
         </span>
-        <span className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium flex items-center gap-0.5 sm:gap-1 ${priorityStyles[task.priority as keyof typeof priorityStyles]}`}>
-          <FiFlag className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+        <span className={priorityStyles[task.priority]}>
+          <FiFlag className="w-3 h-3 inline mr-0.5" />
           {task.priority}
         </span>
         {task.dueDate && (
-          <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300 flex items-center gap-0.5 sm:gap-1">
-            <FiCalendar className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+          <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+            <FiCalendar className="w-3 h-3 inline mr-0.5" />
             {new Date(task.dueDate).toLocaleDateString()}
           </span>
         )}
       </div>
 
-      <div className="flex items-center justify-between pt-2 sm:pt-3 border-t border-gray-200/50 dark:border-gray-700/50">
-        <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">
+      <div className="flex items-center justify-between pt-3 border-t border-gray-200/50 dark:border-gray-700/50">
+        <span className="text-xs text-gray-400 dark:text-gray-500">
           {task.createdAt && new Date(task.createdAt).toLocaleDateString()}
         </span>
         <select
           value={task.status}
-          onChange={(e) => onStatusChange(task._id, e.target.value as Task['status'])}
-          className="text-[10px] sm:text-xs border rounded-lg px-1.5 sm:px-2 py-0.5 sm:py-1 bg-transparent border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
+          onChange={(e) => onStatusChange(task._id, e.target.value)}
+          className="text-xs border rounded-lg px-2 py-1 bg-transparent border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 transition-all"
         >
           <option value="pending">Pending</option>
           <option value="in-progress">In Progress</option>
@@ -407,154 +491,5 @@ function TaskCard({ task, onEdit, onDelete, onStatusChange }: any) {
         </select>
       </div>
     </motion.div>
-  );
-}
-
-// Task Form Modal Component
-function TaskFormModal({ editingTask, formData, setFormData, onSubmit, onCancel }: any) {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4"
-      onClick={onCancel}
-    >
-      <motion.div
-        initial={{ scale: 0.9, y: 20 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.9, y: 20 }}
-        className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 max-w-md w-full max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
-            {editingTask ? 'Edit Task' : 'Create New Task'}
-          </h2>
-          <button
-            onClick={onCancel}
-            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-          >
-            <FiX className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500 dark:text-gray-400" />
-          </button>
-        </div>
-
-        <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Title *
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter task title"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Description *
-            </label>
-            <textarea
-              required
-              rows={3}
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter task description"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Status
-              </label>
-              <select
-                value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value as Task['status'] })}
-                className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="pending">Pending</option>
-                <option value="in-progress">In Progress</option>
-                <option value="completed">Completed</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Priority
-              </label>
-              <select
-                value={formData.priority}
-                onChange={(e) => setFormData({ ...formData, priority: e.target.value as Task['priority'] })}
-                className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Due Date
-            </label>
-            <input
-              type="date"
-              value={formData.dueDate}
-              onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-              className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-2">
-            <button
-              type="submit"
-              className="w-full sm:flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2 text-sm sm:text-base"
-            >
-              <FiSave className="w-4 h-4" />
-              {editingTask ? 'Update Task' : 'Create Task'}
-            </button>
-            <button
-              type="button"
-              onClick={onCancel}
-              className="w-full sm:px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm sm:text-base"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-// Empty State Component
-function EmptyState({ searchTerm, onCreateTask }: any) {
-  return (
-    <div className="text-center py-8 sm:py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-200/50 dark:border-gray-700/50 px-4">
-      <div className="text-4xl sm:text-6xl mb-4">📋</div>
-      <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">
-        {searchTerm ? 'No tasks match your search' : 'No tasks yet'}
-      </h3>
-      <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-        {searchTerm 
-          ? 'Try adjusting your search or filters' 
-          : 'Create your first task to get started!'}
-      </p>
-      {!searchTerm && (
-        <button
-          onClick={onCreateTask}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
-        >
-          Create Task
-        </button>
-      )}
-    </div>
   );
 }
