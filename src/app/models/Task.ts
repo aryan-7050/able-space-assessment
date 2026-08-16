@@ -1,6 +1,6 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Model } from 'mongoose';
 
-export interface ITask extends Document {
+export interface ITask {
   title: string;
   description: string;
   status: 'pending' | 'in-progress' | 'completed';
@@ -11,31 +11,36 @@ export interface ITask extends Document {
   updatedAt: Date;
 }
 
-const TaskSchema: Schema = new Schema(
+const TaskSchema = new Schema<ITask>(
   {
     title: {
       type: String,
       required: [true, 'Please provide a title'],
       maxlength: [100, 'Title cannot be more than 100 characters'],
     },
+
     description: {
       type: String,
       required: [true, 'Please provide a description'],
       maxlength: [500, 'Description cannot be more than 500 characters'],
     },
+
     status: {
       type: String,
       enum: ['pending', 'in-progress', 'completed'],
       default: 'pending',
     },
+
     priority: {
       type: String,
       enum: ['low', 'medium', 'high'],
       default: 'medium',
     },
+
     dueDate: {
       type: Date,
     },
+
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
@@ -47,4 +52,8 @@ const TaskSchema: Schema = new Schema(
   }
 );
 
-export default mongoose.models.Task || mongoose.model<ITask>('Task', TaskSchema);
+const Task: Model<ITask> =
+  (mongoose.models.Task as Model<ITask>) ||
+  mongoose.model<ITask>('Task', TaskSchema);
+
+export default Task;
