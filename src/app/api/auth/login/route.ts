@@ -25,7 +25,6 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-    
     const isPasswordValid = await user.comparePassword(validatedData.password);
     
     if (!isPasswordValid) {
@@ -34,7 +33,6 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
       console.error('JWT_SECRET not set in environment variables');
@@ -81,6 +79,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
     return NextResponse.json(
       { success: false, error: error.message || 'Login failed' },
       { status: 500 }
