@@ -124,17 +124,6 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <motion.div 
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-              className="inline-flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full mb-4 sm:mb-6"
-            >
-              <FiZap className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400" />
-              <span className="text-[10px] sm:text-sm font-medium text-blue-600 dark:text-blue-400">
-                 New: AI-Powered Task Management
-              </span>
-            </motion.div>
 
             <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-3 sm:mb-6 leading-tight">
               <span className="gradient-text">Streamline Your</span>
